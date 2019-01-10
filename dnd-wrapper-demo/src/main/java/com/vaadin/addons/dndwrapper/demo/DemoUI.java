@@ -43,31 +43,6 @@ public class DemoUI extends UI {
     public static class Servlet extends VaadinServlet {
     }
 
-    class ImageUploader implements Receiver, SucceededListener {
-        public File file;
-
-        public OutputStream receiveUpload(String filename, String mimeType) {
-            // Create upload stream
-            FileOutputStream fos = null; // Stream to write to
-            try {
-                // Open the file for writing.
-                file = new File("C:/DEV/" + filename);
-                fos = new FileOutputStream(file);
-            } catch (final java.io.FileNotFoundException e) {
-                new Notification("Could not open file<br/>", e.getMessage(),
-                        Notification.Type.ERROR_MESSAGE)
-                                .show(Page.getCurrent());
-                return null;
-            }
-            return fos; // Return the output stream to write to
-        }
-
-        public void uploadSucceeded(SucceededEvent event) {
-            // Show the uploaded file in the image viewer
-            Notification.show("yeey");
-        }
-    };
-
     @Override
     protected void init(VaadinRequest request) {
         Panel panel = new Panel("DnD upload panel");
