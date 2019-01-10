@@ -5,7 +5,7 @@ DnDWrapper is an add-on for providing functionality described in https://github.
 
 ## Download release
 
-Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to http://vaadin.com/directory/dndwrapper-add-on
+Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to http://vaadin.com/directory/component/dndwrapper-add-on
 
 ## Building and running demo
 
