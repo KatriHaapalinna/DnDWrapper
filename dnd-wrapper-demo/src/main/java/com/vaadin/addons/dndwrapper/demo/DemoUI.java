@@ -1,7 +1,5 @@
 package com.vaadin.addons.dndwrapper.demo;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
@@ -28,21 +26,12 @@ import com.vaadin.ui.Html5File;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.Upload.Receiver;
-import com.vaadin.ui.Upload.SucceededEvent;
-import com.vaadin.ui.Upload.SucceededListener;
 import com.vaadin.ui.VerticalLayout;
 
 @Theme("demo")
 @Title("DnDWrapper Add-on Demo")
 @SuppressWarnings("serial")
 public class DemoUI extends UI {
-
-    @WebServlet(value = "/*", asyncSupported = true)
-    @VaadinServletConfiguration(productionMode = false, ui = DemoUI.class)
-    public static class Servlet extends VaadinServlet {
-    }
-
     @Override
     protected void init(VaadinRequest request) {
         Panel panel = new Panel("DnD upload panel");
@@ -60,7 +49,8 @@ public class DemoUI extends UI {
                 if (files != null) {
                     List<Html5File> filesToUpload = Arrays.asList(files);
                     for (Html5File file : filesToUpload) {
-                        file.setStreamVariable(new MyStreamVariable());
+                        file.setStreamVariable(
+                                new MyStreamVariable(file.getFileName()));
                     }
                 }
             }
@@ -82,10 +72,25 @@ public class DemoUI extends UI {
 
     class MyStreamVariable implements StreamVariable {
         private static final long serialVersionUID = 1L;
+        private String fileName;
+
+        public MyStreamVariable(String fileName) {
+            super();
+            this.fileName = fileName;
+        }
 
         @Override
         public OutputStream getOutputStream() {
-            return new ByteArrayOutputStream();
+            FileOutputStream fos = null; // Stream to write to
+            try {
+                fos = new FileOutputStream("C:/DEV/" + fileName);
+            } catch (final java.io.FileNotFoundException e) {
+                new Notification("Could not open file<br/>", e.getMessage(),
+                        Notification.Type.ERROR_MESSAGE)
+                                .show(Page.getCurrent());
+                return null;
+            }
+            return fos;
         }
 
         @Override
@@ -116,6 +121,7 @@ public class DemoUI extends UI {
 
         @Override
         public void streamingFinished(StreamingEndEvent event) {
+            Notification.show("File(s) uploaded!");
         }
 
         @Override
@@ -129,14 +135,8 @@ public class DemoUI extends UI {
 
     }
 
-    protected String formatSize(double contentLength) {
-        double d = contentLength;
-        int suffix = 0;
-        String[] suffixes = new String[] { "B", "KB", "MB", "GB", "TB" };
-        while (d > 1024) {
-            suffix++;
-            d /= 1024.0;
-        }
-        return String.format("%.1f %s", d, suffixes[suffix]);
+    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
+    @VaadinServletConfiguration(ui = DemoUI.class, productionMode = false)
+    public static class MyUIServlet extends VaadinServlet {
     }
 }
