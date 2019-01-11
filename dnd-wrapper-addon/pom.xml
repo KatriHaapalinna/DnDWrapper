@@ -5,7 +5,7 @@
 	<groupId>com.vaadin.addons</groupId>
 	<artifactId>dnd-wrapper</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0</version>
+	<version>1.1</version>
 	<name>DnDWrapper Add-on</name>
 	<organization>
         <name>Vaadin Community</name>

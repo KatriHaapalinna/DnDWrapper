@@ -5,7 +5,7 @@
 	<groupId>com.vaadin.addons</groupId>
 	<artifactId>dnd-wrapper-root</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0</version>
+	<version>1.1</version>
 	<name>DnDWrapper Add-on Root Project</name>
 
 	<prerequisites>

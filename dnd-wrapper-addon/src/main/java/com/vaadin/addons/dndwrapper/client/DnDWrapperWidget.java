@@ -30,21 +30,17 @@ public class DnDWrapperWidget extends VDragAndDropWrapper {
 
             @Override
             public void execute() {
-                if (!uploading) {
-                    if (fileIds.size() > 0) {
-
-                        uploading = true;
-                        final Integer fileId = fileIds.remove(0);
-                        VHtml5File file = files.remove(0);
-                        final String receiverUrl = client.translateVaadinUri(
-                                fileIdToReceiver.remove(fileId.toString()));
-                        DnDExtendedXHR extendedXHR = (DnDExtendedXHR) DnDExtendedXHR
-                                .create();
-                        extendedXHR
-                                .setOnReadyStateChange(readyStateChangeHandler);
-                        extendedXHR.open("POST", receiverUrl);
-                        extendedXHR.postFile(file);
-                    }
+                if (!uploading && !fileIds.isEmpty()) {
+                    uploading = true;
+                    final Integer fileId = fileIds.remove(0);
+                    VHtml5File file = files.remove(0);
+                    final String receiverUrl = client.translateVaadinUri(
+                            fileIdToReceiver.remove(fileId.toString()));
+                    DnDExtendedXHR xhr = (DnDExtendedXHR) DnDExtendedXHR
+                            .create();
+                    xhr.setOnReadyStateChange(readyStateChangeHandler);
+                    xhr.open("POST", receiverUrl);
+                    xhr.postFile(file);
                 }
 
             }
@@ -61,7 +57,7 @@ public class DnDWrapperWidget extends VDragAndDropWrapper {
         /*-{
             var formData = new $wnd.FormData();
             formData.append("File", file);
-            this.send(file);
+            this.send(formData);
         }-*/;
 
     }
